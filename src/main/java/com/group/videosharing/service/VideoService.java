@@ -39,6 +39,15 @@ public class VideoService implements IVideoService {
                 .orElseThrow(() -> new NoSuchElementException("Video not found: " + videoId));
     }
 
+    @Override
+    public List<VideoDto> getAllPublicVideos() {
+        return videoRepository
+                .findByVisibilityOrderByUploadedAtDesc(PUBLIC_VISIBILITY)
+                .stream()
+                .map(videoMapper::toDto)
+                .toList();
+    }
+
     private void validateId(String id, String fieldName) {
         if (id == null || id.isBlank()) {
             throw new IllegalArgumentException(fieldName + " must not be blank");
