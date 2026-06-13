@@ -4,6 +4,7 @@ import com.group.videosharing.dto.UserDto;
 import com.group.videosharing.dto.VideoDto;
 import com.group.videosharing.patterns.behavioral.strategy.RecommendationStrategy;
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * Template Method — Pattern 3: HomePageLoader
@@ -11,6 +12,17 @@ import java.util.List;
  * processData() áp dụng RecommendationStrategy (Guest hoặc Personalized).
  */
 public class HomePageLoader extends ContentLoader {
+    private final Supplier<List<VideoDto>> source;
+    private final RecommendationStrategy recommendationStrategy;
+    private final UserDto viewer;
+
+    public HomePageLoader(Supplier<List<VideoDto>> source,
+                          RecommendationStrategy recommendationStrategy,
+                          UserDto viewer) {
+        this.source = source;
+        this.recommendationStrategy = recommendationStrategy;
+        this.viewer = viewer;
+    }
 
     private final List<VideoDto>        allVideos;
     private final RecommendationStrategy strategy;

@@ -1,8 +1,12 @@
 package com.group.videosharing.service;
 
+import com.group.videosharing.domain.VideoEntity;
 import com.group.videosharing.dto.VideoDto;
+import com.group.videosharing.patterns.behavioral.observer.LikeChangedEvent;
+import com.group.videosharing.patterns.behavioral.observer.VideoViewedEvent;
 import com.group.videosharing.patterns.structural.facade.IVideoService;
 import com.group.videosharing.repository.VideoRepository;
+import com.group.videosharing.patterns.creational.singleton.EventBus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -4,6 +4,7 @@ import com.group.videosharing.dto.VideoDto;
 import com.group.videosharing.patterns.behavioral.strategy.SearchContext;
 import com.group.videosharing.patterns.behavioral.strategy.SearchStrategy;
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * Template Method — Pattern 3: SearchResultLoader

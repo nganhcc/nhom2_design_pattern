@@ -1,17 +1,23 @@
 package com.group.videosharing.patterns.behavioral.command;
 
+import com.group.videosharing.patterns.structural.proxy.IInteractionService;
+
 public class DislikeCommand implements ICommand {
+    private final IInteractionService interactionService;
     private final String videoId;
 
-    public DislikeCommand(String videoId) { this.videoId = videoId; }
+    public DislikeCommand(IInteractionService interactionService, String videoId) {
+        this.interactionService = interactionService;
+        this.videoId = videoId;
+    }
 
     @Override
     public void execute() {
-        // TODO: gọi service.dislike(videoId)
+        interactionService.dislike(videoId);
     }
 
     @Override
     public void undo() {
-        // TODO: gọi service.undislike(videoId)
+        interactionService.undislike(videoId);
     }
 }
