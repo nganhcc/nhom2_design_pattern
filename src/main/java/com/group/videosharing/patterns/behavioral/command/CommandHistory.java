@@ -1,8 +1,11 @@
 package com.group.videosharing.patterns.behavioral.command;
 
+import org.springframework.stereotype.Component;
+
 import java.util.ArrayDeque;
 import java.util.Deque;
 
+@Component
 public class CommandHistory {
     private final Deque<ICommand> stack = new ArrayDeque<>();
 
