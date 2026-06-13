@@ -67,12 +67,39 @@ class VideoServiceTest {
         assertThrows(NoSuchElementException.class, () -> videoService.getVideoById("missing"));
     }
 
+    @Test
+    void recordViewIncrementsViewCountAndPublishesEvent() {
+        VideoEntity video = video("video-1", "channel-1");
+        ReflectionTestUtils.setField(video, "viewCount", 5L);
+        videoRepository.videoById = Optional.of(video);
+
+        VideoDto result = videoService.recordView("video-1");
+
+        assertEquals(6L, result.getViewCount());
+        assertEquals(6L, ReflectionTestUtils.getField(video, "viewCount"));
+        assertEquals("video-1", videoRepository.lastSavedVideo.getId());
+    }
+
+    @Test
+    void likeVideoIncrementsLikeCountAndPublishesEvent() {
+        VideoEntity video = video("video-1", "channel-1");
+        ReflectionTestUtils.setField(video, "likeCount", 2L);
+        videoRepository.videoById = Optional.of(video);
+
+        VideoDto result = videoService.likeVideo("video-1");
+
+        assertEquals(3L, result.getLikeCount());
+        assertEquals(3L, ReflectionTestUtils.getField(video, "likeCount"));
+        assertEquals("video-1", videoRepository.lastSavedVideo.getId());
+    }
+
     private static class FakeVideoRepository {
         private List<VideoEntity> videosByChannel = List.of();
         private Optional<VideoEntity> videoById = Optional.empty();
         private String lastUploaderId;
         private String lastVisibility;
         private String lastFindById;
+        private VideoEntity lastSavedVideo;
 
         private VideoRepository proxy() {
             return (VideoRepository) Proxy.newProxyInstance(
@@ -87,6 +114,10 @@ class VideoServiceTest {
                         if (method.getName().equals("findById")) {
                             lastFindById = (String) args[0];
                             return videoById;
+                        }
+                        if (method.getName().equals("save")) {
+                            lastSavedVideo = (VideoEntity) args[0];
+                            return lastSavedVideo;
                         }
                         if (method.getName().equals("toString")) {
                             return "FakeVideoRepository";

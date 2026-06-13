@@ -48,6 +48,30 @@ public class VideoEntity {
     @Column(nullable = false)
     private LocalDateTime uploadedAt = LocalDateTime.now();
 
+    public void incrementViewCount() {
+        this.viewCount++;
+    }
+
+    public void incrementLikeCount() {
+        this.likeCount++;
+    }
+
+    public void decrementLikeCount() {
+        if (this.likeCount > 0) {
+            this.likeCount--;
+        }
+    }
+
+    public void incrementDislikeCount() {
+        this.dislikeCount++;
+    }
+
+    public void decrementDislikeCount() {
+        if (this.dislikeCount > 0) {
+            this.dislikeCount--;
+        }
+    }
+
     // ── Builder ──────────────────────────────────────────────────────────────
 
     public static class Builder {

@@ -1,17 +1,23 @@
 package com.group.videosharing.patterns.behavioral.command;
 
+import com.group.videosharing.patterns.structural.proxy.IInteractionService;
+
 public class SubscribeCommand implements ICommand {
+    private final IInteractionService interactionService;
     private final String channelId;
 
-    public SubscribeCommand(String channelId) { this.channelId = channelId; }
+    public SubscribeCommand(IInteractionService interactionService, String channelId) {
+        this.interactionService = interactionService;
+        this.channelId = channelId;
+    }
 
     @Override
     public void execute() {
-        // TODO: gọi service.subscribe(channelId)
+        interactionService.subscribe(channelId);
     }
 
     @Override
     public void undo() {
-        // TODO: gọi service.unsubscribe(channelId)
+        interactionService.unsubscribe(channelId);
     }
 }
