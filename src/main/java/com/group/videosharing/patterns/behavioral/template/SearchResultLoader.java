@@ -1,17 +1,24 @@
 package com.group.videosharing.patterns.behavioral.template;
 
 import com.group.videosharing.dto.VideoDto;
+import com.group.videosharing.patterns.behavioral.strategy.SearchContext;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class SearchResultLoader extends ContentLoader {
     private final String query;
+    private final Supplier<List<VideoDto>> source;
+    private final SearchContext searchContext;
 
-    public SearchResultLoader(String query) { this.query = query; }
+    public SearchResultLoader(String query, Supplier<List<VideoDto>> source, SearchContext searchContext) {
+        this.query = query;
+        this.source = source;
+        this.searchContext = searchContext;
+    }
 
     @Override
     protected List<VideoDto> fetchData() {
-        // TODO: gọi search service với query
-        return List.of();
+        return source.get();
     }
 
     @Override
@@ -19,7 +26,6 @@ public class SearchResultLoader extends ContentLoader {
 
     @Override
     protected List<VideoDto> sortData(List<VideoDto> data) {
-        // TODO: sort theo strategy đã chọn
-        return data;
+        return searchContext.search(query, data);
     }
 }
