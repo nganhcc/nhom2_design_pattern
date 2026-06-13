@@ -43,48 +43,13 @@ public class VideoService implements IVideoService {
                 .orElseThrow(() -> new NoSuchElementException("Video not found: " + videoId));
     }
 
-    public VideoDto recordView(String videoId) {
-        VideoEntity video = fetchVideo(videoId);
-        video.incrementViewCount();
-        videoRepository.save(video);
-        EventBus.getInstance().publish(new VideoViewedEvent(videoId));
-        return videoMapper.toDto(video);
-    }
-
-    public VideoDto likeVideo(String videoId) {
-        VideoEntity video = fetchVideo(videoId);
-        video.incrementLikeCount();
-        videoRepository.save(video);
-        EventBus.getInstance().publish(new LikeChangedEvent(videoId, video.getLikeCount()));
-        return videoMapper.toDto(video);
-    }
-
-    public VideoDto unlikeVideo(String videoId) {
-        VideoEntity video = fetchVideo(videoId);
-        video.decrementLikeCount();
-        videoRepository.save(video);
-        EventBus.getInstance().publish(new LikeChangedEvent(videoId, video.getLikeCount()));
-        return videoMapper.toDto(video);
-    }
-
-    public VideoDto dislikeVideo(String videoId) {
-        VideoEntity video = fetchVideo(videoId);
-        video.incrementDislikeCount();
-        videoRepository.save(video);
-        return videoMapper.toDto(video);
-    }
-
-    public VideoDto undislikeVideo(String videoId) {
-        VideoEntity video = fetchVideo(videoId);
-        video.decrementDislikeCount();
-        videoRepository.save(video);
-        return videoMapper.toDto(video);
-    }
-
-    private VideoEntity fetchVideo(String videoId) {
-        validateId(videoId, "videoId");
-        return videoRepository.findById(videoId)
-                .orElseThrow(() -> new NoSuchElementException("Video not found: " + videoId));
+    @Override
+    public List<VideoDto> getAllPublicVideos() {
+        return videoRepository
+                .findByVisibilityOrderByUploadedAtDesc(PUBLIC_VISIBILITY)
+                .stream()
+                .map(videoMapper::toDto)
+                .toList();
     }
 
     private void validateId(String id, String fieldName) {

@@ -7,14 +7,25 @@ import java.util.List;
 public class RelevanceSearchStrategy implements SearchStrategy {
     @Override
     public List<VideoDto> execute(String query, List<VideoDto> items) {
+        if (query == null || query.isBlank()) {
+            return items;
+        }
+        String q = query.toLowerCase();
         return items.stream()
-                .filter(video -> SearchTextSupport.matches(query, video))
-                .sorted(Comparator
-                        .comparingInt((VideoDto video) -> SearchTextSupport.relevanceScore(query, video))
-                        .reversed()
-                        .thenComparing(VideoDto::getViewCount, Comparator.reverseOrder())
-                        .thenComparing(VideoDto::getCreatedAt, Comparator.nullsLast(Comparator.reverseOrder()))
-                        .thenComparing(VideoDto::getId, Comparator.nullsLast(String::compareTo)))
+                .filter(v -> matchesKeyword(v, q))
+                .sorted(Comparator.comparingInt(v -> titleScore(v, q)))
                 .toList();
+    }
+
+    private boolean matchesKeyword(VideoDto v, String q) {
+        String title = v.getTitle() == null ? "" : v.getTitle().toLowerCase();
+        String desc  = v.getDescription() == null ? "" : v.getDescription().toLowerCase();
+        return title.contains(q) || desc.contains(q);
+    }
+
+    /** 0 = keyword nằm trong title (ưu tiên cao hơn), 1 = chỉ nằm trong description */
+    private int titleScore(VideoDto v, String q) {
+        String title = v.getTitle() == null ? "" : v.getTitle().toLowerCase();
+        return title.contains(q) ? 0 : 1;
     }
 }
