@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface VideoRepository extends JpaRepository<VideoEntity, String> {
     List<VideoEntity> findByUploaderIdAndVisibilityOrderByUploadedAtDesc(String uploaderId, String visibility);
+    List<VideoEntity> findByVisibilityOrderByUploadedAtDesc(String visibility);
 }
