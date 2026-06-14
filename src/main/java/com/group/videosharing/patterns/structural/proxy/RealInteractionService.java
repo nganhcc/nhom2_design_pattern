@@ -1,8 +1,6 @@
 package com.group.videosharing.patterns.structural.proxy;
 
-import com.group.videosharing.patterns.behavioral.observer.LikeChangedEvent;
 import com.group.videosharing.patterns.behavioral.observer.SubscriptionChangedEvent;
-import com.group.videosharing.patterns.behavioral.observer.VideoViewedEvent;
 import com.group.videosharing.patterns.creational.singleton.EventBus;
 import com.group.videosharing.patterns.creational.singleton.SessionManager;
 import com.group.videosharing.service.SubscriptionService;
