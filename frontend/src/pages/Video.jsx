@@ -69,6 +69,20 @@ export default function Video() {
     <div>
       <h1 className="section-title">{video.title}</h1>
       <div className="card">
+      <section className="pattern-panel">
+        <h2>State Pattern</h2>
+        <p>Trạng thái phát video được quản lý bởi State Pattern ở backend.</p>
+        <div className="status-row">
+          <span><strong>Player state:</strong> {playerState}</span>
+          <span>{stateMessage || 'No playback action yet'}</span>
+        </div>
+        <div className="button-row">
+          <button className="button small" onClick={() => handlePlayback(`/videos/${id}/play`, null, 'Play')}>Play</button>
+          <button className="button small" onClick={() => handlePlayback(`/videos/${id}/pause`, null, 'Pause')}>Pause</button>
+          <button className="button small" onClick={() => handlePlayback(`/videos/${id}/seek`, { timeMs: 60000 }, 'Seek 60s')}>Seek 60s</button>
+          <button className="button small" onClick={() => handlePlayback(`/videos/${id}/end`, null, 'End')}>End</button>
+        </div>
+      </section>
         <div>{video.description}</div>
         <div>
           <strong>Channel:</strong>{' '}
@@ -92,20 +106,6 @@ export default function Video() {
         {undoMessage && <div className="pattern-note">{undoMessage}</div>}
       </section>
 
-      <section className="pattern-panel">
-        <h2>State Pattern</h2>
-        <p>Trạng thái phát video được quản lý bởi State Pattern ở backend.</p>
-        <div className="status-row">
-          <span><strong>Player state:</strong> {playerState}</span>
-          <span>{stateMessage || 'No playback action yet'}</span>
-        </div>
-        <div className="button-row">
-          <button className="button small" onClick={() => handlePlayback(`/videos/${id}/play`, null, 'Play')}>Play</button>
-          <button className="button small" onClick={() => handlePlayback(`/videos/${id}/pause`, null, 'Pause')}>Pause</button>
-          <button className="button small" onClick={() => handlePlayback(`/videos/${id}/seek`, { timeMs: 60000 }, 'Seek 60s')}>Seek 60s</button>
-          <button className="button small" onClick={() => handlePlayback(`/videos/${id}/end`, null, 'End')}>End</button>
-        </div>
-      </section>
 
       <CommentList videoId={id} />
     </div>
