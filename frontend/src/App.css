@@ -1,0 +1,168 @@
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-content {
+  padding: 24px;
+  width: min(1100px, 100%);
+  margin: 0 auto;
+}
+
+.section-title {
+  margin-top: 0;
+  margin-bottom: 16px;
+  color: var(--heading);
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+
+.grid {
+  display: grid;
+  gap: 20px;
+}
+
+.grid-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (max-width: 900px) {
+  .grid-cols-3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.input-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.pattern-panel {
+  margin-top: 24px;
+  padding: 18px;
+  border: 1px solid rgba(91, 33, 182, 0.12);
+  border-radius: 18px;
+  background: rgba(235, 208, 255, 0.18);
+}
+
+.pattern-panel h2 {
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.pattern-note,
+.status-row {
+  margin-top: 12px;
+}
+
+.pattern-note {
+  padding: 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid #ddd;
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.button.small {
+  padding: 10px 14px;
+  font-size: 0.95rem;
+}
+
+.comment-item {
+  padding: 12px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.95);
+  border: 1px solid #eee;
+  margin-top: 8px;
+}
+
+.comment-meta {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.button.danger {
+  background: #ffecec;
+  border: 1px solid #ffb3b3;
+}
+
+.input-row input,
+.input-row textarea,
+.input-row select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  outline: none;
+}
+
+.comment-item {
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: #f8fafc;
+  margin-bottom: 12px;
+}
+
+.comment-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+  color: #374151;
+}
+
+.comment-replies {
+  margin-top: 12px;
+}
+
+.card button {
+  margin-top: 12px;
+}
+
+.button {
+  background: var(--accent);
+  color: var(--accent-contrast);
+  border: none;
+  border-radius: 14px;
+  padding: 12px 18px;
+  transition: opacity 0.2s ease;
+}
+
+.button:hover {
+  opacity: 0.95;
+}
+
+button {
+  cursor: pointer;
+}
+
+small {
+  color: #6b7280;
+}
+
+.error-box {
+  color: #b91c1c;
+  background: #fee2e2;
+  border: 1px solid #fecaca;
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 16px;
+}
