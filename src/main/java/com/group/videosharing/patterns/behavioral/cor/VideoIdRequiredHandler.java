@@ -2,12 +2,13 @@ package com.group.videosharing.patterns.behavioral.cor;
 
 import com.group.videosharing.dto.CommentRequest;
 import com.group.videosharing.dto.ValidationResult;
-import com.group.videosharing.patterns.creational.singleton.SessionManager;
 
-public class AuthCheckHandler extends CommentHandler {
+public class VideoIdRequiredHandler extends CommentHandler {
     @Override
     public ValidationResult handle(CommentRequest req) {
-        if (!SessionManager.getInstance().isLoggedIn()) return ValidationResult.fail("Chưa đăng nhập");
+        if (req.getVideoId() == null || req.getVideoId().isBlank()) {
+            return ValidationResult.fail("videoId không được trống");
+        }
         return passToNext(req);
     }
 }

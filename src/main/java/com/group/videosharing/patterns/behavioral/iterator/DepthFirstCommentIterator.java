@@ -11,7 +11,11 @@ import java.util.List;
 public class DepthFirstCommentIterator implements ICommentIterator {
     private final Deque<CommentComponent> stack = new ArrayDeque<>();
 
-    public DepthFirstCommentIterator(List<CommentComponent> roots) { roots.forEach(stack::push); }
+    public DepthFirstCommentIterator(List<CommentComponent> roots) {
+        for (int i = roots.size() - 1; i >= 0; i--) {
+            stack.push(roots.get(i));
+        }
+    }
 
     @Override public boolean hasNext() { return !stack.isEmpty(); }
 
