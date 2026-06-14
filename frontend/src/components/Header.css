@@ -1,0 +1,36 @@
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 18px 24px;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.brand {
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.user-panel {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.user-panel .button.outline {
+  background: transparent;
+  color: #374151;
+  border: 1px solid #d1d5db;
+}
