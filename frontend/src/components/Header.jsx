@@ -1,33 +1,42 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 import UserPanel from './UserPanel'
 import './Header.css'
 
-const linkStyle = ({ isActive }) => ({
+const linkClass = ({ isActive }) => ({
   color: isActive ? '#5b21b6' : '#374151',
   fontWeight: isActive ? 700 : 500,
   textDecoration: 'none',
-  marginRight: 18,
 })
 
 export default function Header() {
+  const [query, setQuery] = useState('')
+  const navigate = useNavigate()
+
+  const handleSearch = (event) => {
+    event.preventDefault()
+    if (query.trim()) {
+      navigate(`/search?q=${encodeURIComponent(query.trim())}`)
+      setQuery('')
+    }
+  }
+
   return (
     <header className="topbar">
-      <div className="brand">VideoSharing</div>
-      <nav>
-        <NavLink to="/" style={linkStyle} end>
-          Home
-        </NavLink>
-        <NavLink to="/search" style={linkStyle}>
-          Search
-        </NavLink>
-        <NavLink to="/upload" style={linkStyle}>
-          Upload
-        </NavLink>
-        <NavLink to="/auth" style={linkStyle}>
-          Auth
-        </NavLink>
-      </nav>
-      <UserPanel />
+      <div className="topbar-left">
+        <div className="brand">VideoSharing</div>
+      </div>
+      <form className="topbar-search" onSubmit={handleSearch}>
+        <input
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search"
+        />
+        <button className="button" type="submit">Search</button>
+      </form>
+      <div className="topbar-right">
+        <UserPanel />
+      </div>
     </header>
   )
 }

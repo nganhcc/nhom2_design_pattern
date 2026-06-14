@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import Header from './components/Header'
+import Sidebar from './components/Sidebar'
 import Home from './pages/Home'
 import Search from './pages/Search'
 import Video from './pages/Video'
@@ -17,16 +18,19 @@ function AppRoutes() {
   }
 
   return (
-    <main className="page-content">
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/search" element={<Search />} />
-        <Route path="/video/:id" element={<Video />} />
-        <Route path="/channel/:id" element={<Channel />} />
-        <Route path="/upload" element={<Upload />} />
-        <Route path="/auth" element={<Auth />} />
-      </Routes>
-    </main>
+    <div className="app-layout">
+      <Sidebar />
+      <main className="page-content">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/search" element={<Search />} />
+          <Route path="/video/:id" element={<Video />} />
+          <Route path="/channel/:id" element={<Channel />} />
+          <Route path="/upload" element={<Upload />} />
+          <Route path="/auth" element={<Auth />} />
+        </Routes>
+      </main>
+    </div>
   )
 }
 

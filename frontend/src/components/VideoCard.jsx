@@ -2,18 +2,17 @@ import { Link } from 'react-router-dom'
 
 export default function VideoCard({ video }) {
   return (
-    <article className="card">
-      <div>
-        <strong>
-          <Link to={`/video/${video.id}`}>{video.title}</Link>
-        </strong>
-      </div>
-      <div>{video.category || 'Uncategorized'}</div>
-      <div>Views: {video.viewCount}</div>
-      <div>Likes: {video.likeCount}</div>
-      <div>Duration: {video.duration}s</div>
-      <div>
-        <small>Channel: <Link to={`/channel/${video.channelId}`}>{video.channelId}</Link></small>
+    <article className="video-card">
+      <Link to={`/video/${video.id}`} className="video-thumb">
+        <img src={video.thumbnailUrl || 'https://via.placeholder.com/320x180?text=Thumbnail'} alt={video.title} />
+        <span className="video-duration">{video.duration}s</span>
+      </Link>
+      <div className="video-card-body">
+        <Link to={`/video/${video.id}`} className="video-title">{video.title}</Link>
+        <div className="video-meta">
+          <span>{video.channelId}</span>
+          <span>{video.viewCount} views</span>
+        </div>
       </div>
     </article>
   )

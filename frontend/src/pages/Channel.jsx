@@ -35,28 +35,38 @@ export default function Channel() {
   if (!channel) return <div>Loading...</div>
 
   return (
-    <div>
-      <h1 className="section-title">{channel.channelInfo.username}</h1>
-      <div className="card">
-        <div>{channel.channelInfo.email || 'No email'}</div>
-        <div>Subscribers: {channel.subscriberCount}</div>
+    <div className="channel-page">
+      <div className="channel-banner card">
+        <div className="channel-banner-info">
+          <h1>{channel.channelInfo.username}</h1>
+          <p>{channel.channelInfo.email || 'No email provided'}</p>
+          <p>{channel.subscriberCount} subscribers</p>
+        </div>
+        <button className="button large" onClick={toggleSubscription}>
+          {channel.subscribed ? 'Subscribed' : 'Subscribe'}
+        </button>
+      </div>
+
+      <section className="channel-overview card">
+        <h2>About</h2>
+        <p>{channel.channelInfo.description || 'No channel description available.'}</p>
         <section className="pattern-panel">
           <h2>Proxy Pattern</h2>
           <p>
-            Kênh được thao tác qua Proxy service backend: subscribe / unsubscribe đều là điều kiện truy cập ẩn.
-            Backend quyết định cho phép hành động và trả về trạng thái đăng ký.
+            Subscribe / unsubscribe chạy qua backend như một proxy service,
+            nơi backend quyết định trạng thái đăng ký và phản hồi.
           </p>
-          <button className="button" onClick={toggleSubscription}>
-            {channel.subscribed ? 'Unsubscribe' : 'Subscribe'}
-          </button>
         </section>
-      </div>
-      <h2 className="section-title">Videos</h2>
-      <div className="grid grid-cols-3">
-        {channel.videos.map((video) => (
-          <VideoCard key={video.id} video={video} />
-        ))}
-      </div>
+      </section>
+
+      <section>
+        <h2 className="section-title">Videos</h2>
+        <div className="video-grid">
+          {channel.videos.map((video) => (
+            <VideoCard key={video.id} video={video} />
+          ))}
+        </div>
+      </section>
     </div>
   )
 }
