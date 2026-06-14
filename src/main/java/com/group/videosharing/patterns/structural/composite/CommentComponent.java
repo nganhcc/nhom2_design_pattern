@@ -9,7 +9,13 @@ import java.time.LocalDateTime;
 public interface CommentComponent {
     void           render(int depth);
     String         getId();
-    String         getAuthor();
+    String         getVideoId();
+    String         getAuthorId();
     String         getContent();
+    String         getParentId();
     LocalDateTime  getTimestamp();
+
+    default String getAuthor() {
+        return getAuthorId();
+    }
 }

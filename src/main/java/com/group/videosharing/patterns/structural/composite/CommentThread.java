@@ -17,7 +17,9 @@ public class CommentThread implements CommentComponent {
 
     @Override public void          render(int depth) { root.render(depth); children.forEach(c -> c.render(depth + 1)); }
     @Override public String        getId()           { return root.getId(); }
-    @Override public String        getAuthor()       { return root.getAuthor(); }
+    @Override public String        getVideoId()      { return root.getVideoId(); }
+    @Override public String        getAuthorId()     { return root.getAuthorId(); }
     @Override public String        getContent()      { return root.getContent(); }
+    @Override public String        getParentId()     { return root.getParentId(); }
     @Override public LocalDateTime getTimestamp()    { return root.getTimestamp(); }
 }
