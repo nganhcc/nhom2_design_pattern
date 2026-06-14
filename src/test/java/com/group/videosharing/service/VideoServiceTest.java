@@ -2,13 +2,19 @@ package com.group.videosharing.service;
 
 import com.group.videosharing.domain.VideoEntity;
 import com.group.videosharing.dto.VideoDto;
+import com.group.videosharing.patterns.behavioral.observer.DislikeChangedEvent;
+import com.group.videosharing.patterns.behavioral.observer.LikeChangedEvent;
+import com.group.videosharing.patterns.behavioral.observer.VideoViewedEvent;
+import com.group.videosharing.patterns.creational.singleton.EventBus;
 import com.group.videosharing.repository.VideoRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.lang.reflect.Proxy;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -20,11 +26,19 @@ class VideoServiceTest {
 
     private FakeVideoRepository videoRepository;
     private VideoService videoService;
+    private EventBus eventBus;
 
     @BeforeEach
     void setUp() {
         videoRepository = new FakeVideoRepository();
         videoService = new VideoService(videoRepository.proxy(), new VideoMapper());
+        eventBus = EventBus.getInstance();
+        eventBus.clearAllHandlers();
+    }
+
+    @AfterEach
+    void tearDown() {
+        eventBus.clearAllHandlers();
     }
 
     @Test
@@ -72,12 +86,15 @@ class VideoServiceTest {
         VideoEntity video = video("video-1", "channel-1");
         ReflectionTestUtils.setField(video, "viewCount", 5L);
         videoRepository.videoById = Optional.of(video);
+        List<VideoViewedEvent> events = new ArrayList<>();
+        eventBus.subscribe(VideoViewedEvent.class, events::add);
 
         VideoDto result = videoService.recordView("video-1");
 
         assertEquals(6L, result.getViewCount());
         assertEquals(6L, ReflectionTestUtils.getField(video, "viewCount"));
         assertEquals("video-1", videoRepository.lastSavedVideo.getId());
+        assertEquals("video-1", events.getFirst().videoId());
     }
 
     @Test
@@ -85,12 +102,55 @@ class VideoServiceTest {
         VideoEntity video = video("video-1", "channel-1");
         ReflectionTestUtils.setField(video, "likeCount", 2L);
         videoRepository.videoById = Optional.of(video);
+        List<LikeChangedEvent> events = new ArrayList<>();
+        eventBus.subscribe(LikeChangedEvent.class, events::add);
 
         VideoDto result = videoService.likeVideo("video-1");
 
         assertEquals(3L, result.getLikeCount());
         assertEquals(3L, ReflectionTestUtils.getField(video, "likeCount"));
         assertEquals("video-1", videoRepository.lastSavedVideo.getId());
+        assertEquals(3L, events.getFirst().newCount());
+    }
+
+    @Test
+    void unlikeVideoDecrementsLikeCountAndPublishesEvent() {
+        VideoEntity video = video("video-1", "channel-1");
+        ReflectionTestUtils.setField(video, "likeCount", 2L);
+        videoRepository.videoById = Optional.of(video);
+        List<LikeChangedEvent> events = new ArrayList<>();
+        eventBus.subscribe(LikeChangedEvent.class, events::add);
+
+        VideoDto result = videoService.unlikeVideo("video-1");
+
+        assertEquals(1L, result.getLikeCount());
+        assertEquals(1L, events.getFirst().newCount());
+    }
+
+    @Test
+    void dislikeVideoPublishesDislikeChangedEvent() {
+        VideoEntity video = video("video-1", "channel-1");
+        ReflectionTestUtils.setField(video, "dislikeCount", 4L);
+        videoRepository.videoById = Optional.of(video);
+        List<DislikeChangedEvent> events = new ArrayList<>();
+        eventBus.subscribe(DislikeChangedEvent.class, events::add);
+
+        videoService.dislikeVideo("video-1");
+
+        assertEquals(5L, events.getFirst().newCount());
+    }
+
+    @Test
+    void undislikeVideoPublishesDislikeChangedEvent() {
+        VideoEntity video = video("video-1", "channel-1");
+        ReflectionTestUtils.setField(video, "dislikeCount", 4L);
+        videoRepository.videoById = Optional.of(video);
+        List<DislikeChangedEvent> events = new ArrayList<>();
+        eventBus.subscribe(DislikeChangedEvent.class, events::add);
+
+        videoService.undislikeVideo("video-1");
+
+        assertEquals(3L, events.getFirst().newCount());
     }
 
     private static class FakeVideoRepository {

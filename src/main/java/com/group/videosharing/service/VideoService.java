@@ -2,6 +2,7 @@ package com.group.videosharing.service;
 
 import com.group.videosharing.domain.VideoEntity;
 import com.group.videosharing.dto.VideoDto;
+import com.group.videosharing.patterns.behavioral.observer.DislikeChangedEvent;
 import com.group.videosharing.patterns.behavioral.observer.LikeChangedEvent;
 import com.group.videosharing.patterns.behavioral.observer.VideoViewedEvent;
 import com.group.videosharing.patterns.structural.facade.IVideoService;
@@ -71,6 +72,7 @@ public class VideoService implements IVideoService {
         VideoEntity video = fetchVideo(videoId);
         video.incrementDislikeCount();
         videoRepository.save(video);
+        EventBus.getInstance().publish(new DislikeChangedEvent(videoId, video.getDislikeCount()));
         return videoMapper.toDto(video);
     }
 
@@ -78,6 +80,7 @@ public class VideoService implements IVideoService {
         VideoEntity video = fetchVideo(videoId);
         video.decrementDislikeCount();
         videoRepository.save(video);
+        EventBus.getInstance().publish(new DislikeChangedEvent(videoId, video.getDislikeCount()));
         return videoMapper.toDto(video);
     }
 
